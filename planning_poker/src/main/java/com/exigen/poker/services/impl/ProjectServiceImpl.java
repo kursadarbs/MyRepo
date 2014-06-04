@@ -25,6 +25,8 @@ public class ProjectServiceImpl implements ProjectService {
 				if (((SQLException)e.getRootCause()).getErrorCode() == 1) {
 					throw new Exception("Project name exists!");
 				}
+				else 
+					throw e;
 			}
 		}
 		return false;
@@ -87,8 +89,14 @@ public class ProjectServiceImpl implements ProjectService {
 	public void editProject(ProjectEntity currentProject) throws Exception {
 		try {
 			projectDao.update(currentProject);
-		} catch (Exception e) {
-			throw e;
+		} catch(DataIntegrityViolationException e) {
+			if (e.getRootCause() instanceof SQLException) {
+				if (((SQLException)e.getRootCause()).getErrorCode() == 1) {
+					throw new Exception("Project name exists!");
+				}
+				else 
+					throw e;
+			}
 		}
 	}
 

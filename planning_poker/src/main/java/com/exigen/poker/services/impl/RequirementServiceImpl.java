@@ -61,10 +61,21 @@ public class RequirementServiceImpl implements RequirementService {
 	public void editRequirement(RequirementEntity currentRequirement) throws Exception {
 		try {
 			requirementDao.update(currentRequirement);
-		} catch (Exception e) {
-			throw e;
+		} catch(DataIntegrityViolationException e) {
+			if (e.getRootCause() instanceof SQLException) {
+				if (((SQLException)e.getRootCause()).getErrorCode() == 1) {
+					throw new Exception("REQUIREMENT exists!");
+				}
+			}
 		}
 	}
+	
+	public void incRound(RequirementEntity currentRequirement) {
+		currentRequirement.setRound(currentRequirement.getRound()+1);
+		requirementDao.update(currentRequirement);
+	}
+	
+//---------------------------------------------------------------------------
 	
 	public RequirementDao getRequirementDao(){
 			return requirementDao;

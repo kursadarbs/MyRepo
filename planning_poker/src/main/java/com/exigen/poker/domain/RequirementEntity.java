@@ -37,6 +37,12 @@ public class RequirementEntity extends BaseEntity {
 	@NotNull
 	private ProjectEntity project;
 	
+	@Column(name = "round")
+	private Integer round;
+	
+	@Column(name = "req_value")
+	private Integer value;
+	
 	@OneToMany(targetEntity=EstimationEntity.class, mappedBy="requirement",
 			cascade={CascadeType.MERGE, CascadeType.REMOVE})
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -101,6 +107,22 @@ public class RequirementEntity extends BaseEntity {
 
 	public void setEstimationsH(List<EstimationHEntity> estimationsH) {
 		EstimationsH = estimationsH;
+	}
+
+	public Integer getRound() {
+		return round;
+	}
+
+	public void setRound(Integer round) {
+		this.round = round;
+	}
+
+	public Integer getValue() {
+		return value;
+	}
+
+	public void setValue(Integer value) {
+		this.value = value;
 	}
 	
 }

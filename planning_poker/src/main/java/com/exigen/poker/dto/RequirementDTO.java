@@ -35,6 +35,8 @@ public class RequirementDTO {
 		RequirementEntity requirement = new RequirementEntity();
 		requirement.setRequirementDescription(requirementDescription);
 		requirement.setRequirementName(requirementName);
+		requirement.setRound(0);
+		requirement.setValue(-1);
 		
 		try {
 			requirementService.createRequirementIfNotExist(currentProject,requirement);

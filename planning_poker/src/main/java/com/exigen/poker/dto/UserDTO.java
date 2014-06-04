@@ -167,6 +167,8 @@ public class UserDTO implements Serializable{
 		try {
 			estimationService.resetEstimations(getReqEstimations());
 			
+			requirementService.incRound(currentRequirement);
+			
 			FacesContext.getCurrentInstance().addMessage("defaultGrowl",
 					new FacesMessage("Estimations reset succesfull"));
 		} catch (Exception e) {

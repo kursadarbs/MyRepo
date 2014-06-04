@@ -31,6 +31,9 @@ public class ProjectEntity extends BaseEntity{
 	//@Size(max=8190) 
 	private String projectDescription;
 	
+	@Column(name = "pr_value")
+	private Integer value;
+	
 	@OneToMany(targetEntity=RequirementEntity.class, mappedBy="project",
 			fetch=FetchType.EAGER, cascade={CascadeType.MERGE, CascadeType.REMOVE})
 	private  List <RequirementEntity> requirements;
@@ -92,6 +95,14 @@ public class ProjectEntity extends BaseEntity{
 	}
 	public void setProjectDescription(String projectDescription) {
 		this.projectDescription = projectDescription;
+	}
+
+	public Integer getValue() {
+		return value;
+	}
+
+	public void setValue(Integer value) {
+		this.value = value;
 	}
 	
 }

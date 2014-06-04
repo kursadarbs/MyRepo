@@ -20,8 +20,8 @@
 		&rarr; #{projectBean.currentProject.projectName}
 		
 		<h2>#{projectBean.currentProject.projectName}</h2>
+		<h3>Project estimated sum: #{projectBean.currentProject.value}</h3><br/><br/>
 		<h:outputText value="Project Description:" style="font-weight:bold"/>
-		
 		<p><h:outputText value="#{projectBean.currentProject.projectDescription}" styleClass="preformatted"/></p>
 		
 		</h:form>
@@ -52,13 +52,14 @@
 			        
 			        <p:commandButton styleClass="smallButton" id="deleteReq" actionListener="#{requirementBean.setReqToDelete(req)}" oncomplete="cd.show()"  icon="ui-icon-trash"/>
 	        
+	        		Round: #{req.round}
 			</p:dataList>  
 		</h:form>	
 			<p:confirmDialog message="Do you really want to delete the requirement?"
 					header="Delete requirement" severity="alert" widgetVar="cd">
 					
 						<p:commandButton id="deleteRequirement" value="Yes" actionListener="#{requirementBean.deleteRequirement()}" 
-									oncomplete="cd.hide()" update=":formRequirements:, :formRequirements:dataListId"/>
+									oncomplete="cd.hide()" update=":formRequirements:, :formRequirements:dataListId, :defaultGrowl"/>
 						
 						<p:commandButton value="No" onclick="cd.hide();" type="button" />
 			</p:confirmDialog>

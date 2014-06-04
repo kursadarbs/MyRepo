@@ -13,4 +13,6 @@ public interface RequirementService {
 	public List<RequirementEntity> findAllProjReq(ProjectEntity currentProject) throws Exception;
 
 	public void editRequirement(RequirementEntity currentRequirement) throws Exception;
+
+	public void incRound(RequirementEntity currentRequirement);
 }

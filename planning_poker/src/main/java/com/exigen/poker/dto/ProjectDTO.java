@@ -41,6 +41,7 @@ public class ProjectDTO {
 		ProjectEntity project = new ProjectEntity();
 		project.setProjectDescription(projectDescription);
 		project.setProjectName(projectName);
+		project.setValue(0);
 		
 		try {
 			projectService.createProjectIfNotExist(project);

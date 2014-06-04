@@ -12,6 +12,8 @@
 	
 	<ui:define name="content">
 	
+		<p:growl id="defaultGrowl" for="defaultGrowl" />
+	
 		<p:commandLink id="viewProjects" action="project" value="All Projects" actionListener="#{userBean.setUserProjects(null)}" immediate="true"></p:commandLink>
 		&rarr; 
 		<p:commandLink id="viewReq" action="requirement" value="#{projectBean.currentProject.projectName}" immediate="true">
@@ -19,6 +21,7 @@
 		</p:commandLink> &rarr; #{userBean.currentRequirement.requirementName}
 	
 		<h2>#{userBean.currentRequirement.requirementName}</h2>
+		<h3>Round number: #{userBean.currentRequirement.round}</h3><br/><br/>
 		<h:outputText value="Requirement Description:" style="font-weight:bold" />
 		<p><h:outputText value="#{userBean.currentRequirement.requirementDescription}" styleClass="preformatted"/></p>
 		
@@ -41,7 +44,7 @@
 					<p:inputTextarea id="newComment" rows="10" cols="75" value="#{userBean.comment}"
 										maxlength="500" autoResize="false"/>
 					
-					<p:commandButton value="Submit Rating" update=":form2, :form"
+					<p:commandButton value="Submit Rating" update=":form2, :form, :defaultGrowl"
 						id="rateEstimationButton" actionListener="#{userBean.rateEstimation}"/>
 				</h:panelGrid>
 			</p:panel>

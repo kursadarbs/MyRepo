@@ -50,7 +50,7 @@
 		<h:form id="formRegister">
 			<p:dialog header="New Project" widgetVar="RegDialog"
 					modal="true" showEffect="fade">
-				<p:messages id="messages" autoUpdate="true"/>  
+				<p:messages id="messages"/>  
 
 				<h:panelGrid columns="2" id="matchGrid">
 					<h:outputText value="First Name:" />
@@ -101,7 +101,7 @@
 					</p:password>
 						
 
-					<p:commandButton value="Register" update=":formRegister:matchGrid" id="saveNewUserButton" actionListener="#{userBean.addNewUser}"/>
+					<p:commandButton value="Register" update=":formRegister:matchGrid, :formRegister:messages" id="saveNewUserButton" actionListener="#{userBean.addNewUser}"/>
 				</h:panelGrid>
 				
 			</p:dialog>
