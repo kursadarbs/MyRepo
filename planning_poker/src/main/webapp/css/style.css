@@ -1,0 +1,81 @@
+#container {
+	width: 95%;
+	height: auto;
+	margin: auto;
+	padding: 5px 10px 5px 10px;
+	-moz-box-shadow: 2px 2px 5px #888, -2px -2px 5px #888;
+	-webkit-box-shadow: 2px 2px 5px #888, -2px -2px 5px #888;
+	box-shadow: 2px 2px 5px #888, -2px -2px 5px #888;
+}
+
+#logoutPanel {
+	height: 25px;
+	min-width: 30px;
+	float: right;
+	margin: 0 auto;
+	font-family: Verdana;
+	font-size: 12px;
+	margin-top: 7px;
+	margin-right: 7px;
+}
+
+
+
+#logoutPanel a img {
+	border: none;
+	width: 20px;
+	margin-bottom: -7px;
+}
+
+#header{
+	height:100px;
+}
+
+h3{
+	display:inline;	
+}
+
+h2{
+	text-align:center;
+}
+
+h1{
+	text-align:center;
+}
+
+.smallButton {
+	width: 20px;
+    height: 20px;
+}
+
+.rowExpandPG td{
+	border-style: hidden !important;
+	padding-right:40px !important;
+}
+
+.rowExpandPG {
+	margin:10px 0px 10px 40px;
+}
+
+.ui-widget, .ui-widget .ui-widget {
+    font-size: 90%;
+}
+
+.hasRated{
+	background:#00FF00;
+}
+
+.updated{
+	background:#FFFF00
+}
+
+.preformatted {
+    white-space: pre-wrap;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui"
+		template="/WEB-INF/templates/general.xhtml">
+	
+	<ui:define name="title"><h:outputText value="Main Flow" /></ui:define>
+	
+	<ui:define name="content">
+	
+	<h:form id="formMain">
+			<table align="center" style="margin-top: 50pt;" cellpadding="5">
+				<tr>
+					<td colspan="2">
+					<p:messages id="messages" showDetail="false"
+							autoUpdate="false" closable="false" /></td>
+				</tr>
+
+				<tr>
+					<td style="font-size: 23px;" valign="middle"><h:outputText
+							value="Login:" /></td>
+
+					<td><p:inputText id="loginText"
+							value="#{userBean.userLogin}"/></td>
+				</tr>
+
+				<tr>
+					<td style="font-size: 23px;" valign="middle"><h:outputText
+							value="Password:" />
+					</td>
+
+					<td><p:password id="passwordText"
+							value="#{userBean.userPassword}" /></td>
+				</tr>
+
+				<tr>
+					<td align="right"></td>
+					<td align="left"><p:commandButton value="Register" update=":formRegister, :formMain" oncomplete="RegDialog.show()" />
+					<h:outputText value="  " />		
+					<p:commandButton value="Login" update="formMain" id="loginButton"
+							actionListener="#{userBean.userAuthentication}" /></td>
+				</tr>
+			</table>
+		</h:form>
+	
+		<h:form id="formRegister">
+			<p:dialog header="New Project" widgetVar="RegDialog"
+					modal="true" showEffect="fade">
+				<p:messages id="messages" autoUpdate="true"/>  
+
+				<h:panelGrid columns="2" id="matchGrid">
+					<h:outputText value="First Name:" />
+					<p:inputText id="newUserFirstName"
+						value="#{userBean.userFirstName}"
+				        required="true"
+				        requiredMessage="First Name is required"
+				        validatorMessage="First Name should be up to 35 chars long"
+				        maxlength="35"
+						>
+					</p:inputText>
+						
+
+					<h:outputText value="Last Name:" />
+					<p:inputText id="newUserLastName" value="#{userBean.userLastName}"
+						required="true"
+				        requiredMessage="Last Name is required"
+				        validatorMessage="Last Name should be up to 35 chars long"
+				        maxlength="35"
+						>
+					</p:inputText>
+					
+
+					<h:outputText value="Login:" />
+					<p:inputText id="newUserLogin" value="#{userBean.userLogin}" 
+						required="true"
+				        requiredMessage="Login is required"
+				        validatorMessage="Login should be of length from 4 to 35 chars"
+						>
+						<f:validateLength minimum="4" maximum="35" for="newUserLogin"/>
+					</p:inputText>
+					
+
+					<h:outputText value="Password:" />
+					<p:password id="newUserPassword1" value="#{userBean.userPassword}"
+						match="newUserPassword2" label="Password 1"
+						feedback="true" required="true"
+				        requiredMessage="Password1 is required"
+						>
+						<f:validateLength minimum="6" maximum="128" for="newUserPassword1"/>
+						</p:password>
+
+					<h:outputText value="Confirm password:" />
+					<p:password id="newUserPassword2" value="#{userBean.userPassword}"
+						required="true" label="Password 2" 
+						requiredMessage="Password2 is required">
+						<f:validateLength minimum="6" maximum="128" for="newUserPassword2"/>
+					</p:password>
+						
+
+					<p:commandButton value="Register" update=":formRegister:matchGrid" id="saveNewUserButton" actionListener="#{userBean.addNewUser}"/>
+				</h:panelGrid>
+				
+			</p:dialog>
+		</h:form>
+	
+	</ui:define>
+	
+</ui:composition>

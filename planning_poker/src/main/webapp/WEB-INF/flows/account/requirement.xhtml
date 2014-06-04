@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui"
+		template="/WEB-INF/templates/general.xhtml">
+	
+	<ui:define name="title"><h:outputText value="Requirement" /></ui:define>
+	
+	<ui:define name="content">
+	
+		<p:commandLink id="viewProjects" action="project" value="All Projects" actionListener="#{userBean.setUserProjects(null)}" immediate="true"></p:commandLink>
+		&rarr; 
+		<p:commandLink id="viewReq" action="requirement" value="#{projectBean.currentProject.projectName}" immediate="true">
+				<f:setPropertyActionListener value="#{null}" target="#{requirementBean.allProjReq}"/>
+		</p:commandLink> &rarr; #{userBean.currentRequirement.requirementName}
+	
+		<h2>#{userBean.currentRequirement.requirementName}</h2>
+		<h:outputText value="Requirement Description:" style="font-weight:bold" />
+		<p><h:outputText value="#{userBean.currentRequirement.requirementDescription}" styleClass="preformatted"/></p>
+		
+		<h:form id="form">
+		
+			<p:panel id="ratePanel" header="Rate Requirement" rendered="#{!userBean.hasUserRated()}">
+				
+				<p:messages id="messages"/>
+				<h:panelGrid columns="2" id="matchGrid">
+					<h:outputText value="Value:" />
+					<p:inputText id="newValue" value="#{userBean.value}" 
+					maxlength="9"
+					required="true"
+					converterMessage="Value must me a number"
+				    requiredMessage="Value is required"
+				    validatorMessage="Value is too long">
+				    </p:inputText>
+
+					<h:outputText value="Comment:" />
+					<p:inputTextarea id="newComment" rows="10" cols="75" value="#{userBean.comment}"
+										maxlength="500" autoResize="false"/>
+					
+					<p:commandButton value="Submit Rating" update=":form2, :form"
+						id="rateEstimationButton" actionListener="#{userBean.rateEstimation}"/>
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+		
+		<h:form id="form2">
+			<h2>requirement estimations</h2>
+			
+			<p:remoteCommand autoRun="true"  name="dragons" actionListener="#{userBean.userFindReqEstimations()}" update="estDataTable"/>
+			
+	        <p:dataTable id="estDataTable" var="est" value="#{userBean.reqEstimations}"	
+	        				rowStyleClass="#{est.hasRated ? (est.updated ? 'updated' : 'hasRated') : null}" emptyMessage="">
+		        
+		        <p:column headerText="requirement user" style="width:250px">  
+		            <h:outputText value="#{est.user.userFirstName} #{est.user.userLastName}" />  
+		        </p:column>
+		        
+		        <p:column headerText="Value" style="width:100px">  
+		            <h:outputText value="#{est.value}" />  
+		        </p:column>
+		        
+		        <p:column headerText="Comment">  
+		        	<h:outputText value="#{est.comment}" />
+		        </p:column>
+		    
+	        </p:dataTable>
+        </h:form>
+		
+	</ui:define>
+	
+</ui:composition>

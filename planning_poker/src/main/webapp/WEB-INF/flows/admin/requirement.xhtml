@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui"
+		template="/WEB-INF/templates/general.xhtml">
+	
+	<ui:define name="title"><h:outputText value="Requirement" /></ui:define>
+	
+	<ui:define name="content">
+	
+		<p:growl id="defaultGrowl" for="defaultGrowl"/>
+		
+		<h:form id="form">
+		
+		<p:commandLink id="viewProjects" action="project" value="All Projects" actionListener="#{projectBean.setAllProjects(null)}"></p:commandLink>
+		&rarr; 
+		<p:commandLink id="viewReq" action="requirement" value="#{projectBean.currentProject.projectName}">
+				<f:setPropertyActionListener value="#{null}" target="#{requirementBean.allProjReq}" />
+		</p:commandLink> &rarr; #{userBean.currentRequirement.requirementName}
+		
+		<h2>#{userBean.currentRequirement.requirementName}</h2>
+		<h:outputText value="Requirement Description:" style="font-weight:bold" />
+		<p><h:outputText value="#{userBean.currentRequirement.requirementDescription}" styleClass="preformatted"/></p>
+		
+		</h:form>
+		
+		<h:form id="form2">
+			<center><h2>Requirement estimations</h2></center>
+			
+			<p:commandButton id="ResetEstimations"  value="Reset" actionListener="#{userBean.resetEstimations}" update=":form2:estDataTable, :defaultGrowl"/>
+	        
+	       	<p:commandButton id="EstHistoryDialog" value="View history" actionListener="#{userBean.findEstHistory}"
+	       					 update=":form2:estHistoryOutputPanel" oncomplete="estDialog.show()">
+		   	</p:commandButton>
+		   	
+		   	<p:commandButton value="Edit requirement" id="editReq" oncomplete="ReqEDialog.show()" update=":formEditRequirement">
+			</p:commandButton>
+			
+			<p:remoteCommand autoRun="true"  name="dragons" actionListener="#{userBean.findReqEstimations()}" update="estDataTable"/>
+			
+	        <p:dataTable id="estDataTable" var="est" value="#{userBean.reqEstimations}" emptyMessage="" 
+	        				rowStyleClass="#{est.hasRated ? (est.updated ? 'updated' : 'hasRated') : null}">
+	        	<p:column headerText="requirement user" style="width:250px">  
+		            <h:outputText value="#{est.user.userFirstName} #{est.user.userLastName}" />  
+		        </p:column>
+		        
+		        <p:column headerText="Value" style="width:100px">  
+		            <h:outputText value="#{est.value}" />  
+		        </p:column>
+		        
+		        <p:column headerText="Comment">  
+		        	<h:outputText value="#{est.comment}" />
+		        </p:column>
+		        
+	        </p:dataTable>
+	        
+	        <!-- View history -->
+	        <p:dialog header="Estimation History" widgetVar="estDialog" modal="true" showEffect="fade">  
+        	<p:outputPanel id="estHistoryOutputPanel" layout="block">  
+        	
+        	<p:dataTable id="estHDataTable" var="estH" value="#{userBean.estHistory}" scrollable="true" scrollHeight="500">
+        	
+	        	<p:column headerText="requirement user" style="width:250px">  
+		            <h:outputText value="#{estH.user.userFirstName} #{estH.user.userLastName}" />  
+		        </p:column>
+		        
+		        <p:column headerText="Value" style="width:100px">  
+		            <h:outputText value="#{estH.value}" />  
+		        </p:column>
+		        
+		        <p:column headerText="Update time" style="width:170px">  
+		            <h:outputText value="#{estH.updateTime}" />  
+		        </p:column>	
+		        
+		        <p:column headerText="Comment">  
+		            <h:outputText value="#{estH.comment}" />  
+		        </p:column>       
+		        
+	        </p:dataTable>
+	        
+	        <p:commandButton id="EstHistoryCloseDialog" value="Close" oncomplete="estDialog.hide()">
+		   	</p:commandButton>
+        	
+        	</p:outputPanel>  
+    		</p:dialog> 
+	        
+        </h:form>
+        
+        <!-- Edit Requirement -->
+        <h:form id="formEditRequirement">
+			<p:dialog header="Edit requirement" widgetVar="ReqEDialog"
+					modal="true" showEffect="fade">
+
+				<p:messages id="messages" autoUpdate="true"/>
+
+				<h:panelGrid columns="2" id="matchGrid2">
+					<h:outputText value="Requirement Name:" />
+					<p:inputText size="90"
+						value="#{userBean.currentRequirement.requirementName}" 
+						required="true"
+				        requiredMessage="Requiremen name is required"
+				        maxlength="127"/>
+
+					<h:outputText value="Requirement decription:" />
+					<p:inputTextarea rows="15" cols="100" value="#{userBean.currentRequirement.requirementDescription}" autoResize="false"
+										 maxlength="4000"/>
+
+					<f:facet name="footer">
+					<p:commandButton value="Close" oncomplete="ReqEDialog.hide()"/>
+					<p:commandButton value="Submit changes" actionListener="#{userBean.editRequirement}" 
+										update=":form, :defaultGrowl" />
+					</f:facet>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+		
+	</ui:define>
+	
+</ui:composition>

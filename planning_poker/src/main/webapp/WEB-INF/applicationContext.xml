@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	
+	<import resource="datasource-config.xml" />
+	<import resource="webflow-config.xml" />
+	<import resource="security-config.xml" />	
+	
+	<bean id="userBean" class="com.exigen.poker.dto.UserDTO" scope="session">
+		<property name="userService" ref="userService" />
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="estimationService" ref="estimationService" />
+		<property name="projectService" ref="projectService" />
+		<property name="estimationHService" ref="estimationHService" />
+		<property name="requirementService" ref="requirementService" />
+	</bean>
+	
+	<bean id="userDao" class="com.exigen.poker.dao.jpa.UserJpaDao" />
+	
+	<bean id="userService" class="com.exigen.poker.services.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao" />
+		<property name="estimationDao" ref="estimationDao" />
+	</bean>
+	
+	<bean id="projectBean" class="com.exigen.poker.dto.ProjectDTO" scope="session">
+		<property name="projectService" ref="projectService" />
+		<property name="estimationService" ref="estimationService" />
+		<property name="userService" ref="userService" />
+	</bean>
+	
+	<bean id="projectDao" class="com.exigen.poker.dao.jpa.ProjectJpaDao" />
+	
+	<bean id="projectService" class="com.exigen.poker.services.impl.ProjectServiceImpl">
+		<property name="userDao" ref="userDao" />
+		<property name="projectDao" ref="projectDao" />
+	</bean>
+	
+	<bean id="estimationDao" class="com.exigen.poker.dao.jpa.EstimationJpaDao" />
+	
+	<bean id="requirementBean" class="com.exigen.poker.dto.RequirementDTO" scope="session">
+		<property name="projectService" ref="projectService" />
+		<property name="requirementService" ref="requirementService" />
+		<property name="estimationService" ref="estimationService" />
+	</bean>
+	
+	<bean id="estimationService" class="com.exigen.poker.services.impl.EstimationServiceImpl">
+		<property name="estimationDao" ref="estimationDao" />
+		<property name="requirementDao" ref="requirementDao" />
+		<property name="projectDao" ref="projectDao" />
+	</bean>
+	
+	<bean id="requirementDao" class="com.exigen.poker.dao.jpa.RequirementJpaDao" />
+	
+	<bean id="requirementService" class="com.exigen.poker.services.impl.RequirementServiceImpl">
+		<property name="requirementDao" ref="requirementDao" />
+		<property name="estimationHDao" ref="estimationHDao" />
+		<property name="estimationDao" ref="estimationDao" />
+		<property name="userDao" ref="userDao" />
+		<property name="projectDao" ref="projectDao" />
+	</bean>
+	
+	<bean id="estimationHDao" class="com.exigen.poker.dao.jpa.EstimationHJpaDao"/>
+	
+	<bean id="estimationHService" class="com.exigen.poker.services.impl.EstimationHServiceImpl">
+		<property name="estimationHDao" ref="estimationHDao" />
+		<property name="requirementDao" ref="requirementDao" />
+	</bean>
+	
+	<bean id="userConverter" class="com.exigen.poker.services.impl.UserConverter">
+		<property name="userService" ref="userService" />
+	</bean>
+	
+</beans>

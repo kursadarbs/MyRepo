@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui"
+		template="/WEB-INF/templates/general.xhtml">
+	
+	<ui:define name="title"><h:outputText value="project_req" /></ui:define>
+	
+	<ui:define name="content">
+	
+		<p:growl id="defaultGrowl" for="defaultGrowl"/>
+	
+		<h:form id="formStart">
+	
+		<p:commandLink id="viewProjects" action="project" value="All Projects" actionListener="#{projectBean.setAllProjects(null)}"></p:commandLink>
+		&rarr; #{projectBean.currentProject.projectName}
+		
+		<h2>#{projectBean.currentProject.projectName}</h2>
+		<h:outputText value="Project Description:" style="font-weight:bold"/>
+		
+		<p><h:outputText value="#{projectBean.currentProject.projectDescription}" styleClass="preformatted"/></p>
+		
+		</h:form>
+	
+		<h:form id="formRequirementsStart">
+		
+			<p:commandButton id="newReqDialog" value="New requirement"
+				oncomplete="ReqDialog.show()">
+			</p:commandButton>
+			
+			<p:commandButton id="newExpDialog" value="Manage experts" actionListener="#{projectBean.buildDualList}" update=":formManageExperts"
+				oncomplete="ExpDialog.show()">
+			</p:commandButton>
+			
+			<p:commandButton value="Edit project" oncomplete="ProjDialog.show()" update=":formEditProject"/>
+		</h:form>
+		
+		<h:form id="formRequirements">
+			<p:remoteCommand autoRun="true"  name="dragons" actionListener="#{requirementBean.findAllProjReq}" update=":formRequirements:dataListId"/>
+			
+			<h2 style="text-align:center;">Project requirements</h2>
+			
+			<p:dataList id="dataListId" value="#{requirementBean.allProjReq}" var="req" type="ordered">  
+			        <h3><p:commandLink id="onerequirement" action="onerequirement" value="#{req.requirementName}" >
+			                 <f:setPropertyActionListener value="#{req}" target="#{userBean.currentRequirement}" />
+			                 <f:setPropertyActionListener value="#{null}" target="#{userBean.reqEstimations}" />
+			        </p:commandLink> </h3>
+			        
+			        <p:commandButton styleClass="smallButton" id="deleteReq" actionListener="#{requirementBean.setReqToDelete(req)}" oncomplete="cd.show()"  icon="ui-icon-trash"/>
+	        
+			</p:dataList>  
+		</h:form>	
+			<p:confirmDialog message="Do you really want to delete the requirement?"
+					header="Delete requirement" severity="alert" widgetVar="cd">
+					
+						<p:commandButton id="deleteRequirement" value="Yes" actionListener="#{requirementBean.deleteRequirement()}" 
+									oncomplete="cd.hide()" update=":formRequirements:, :formRequirements:dataListId"/>
+						
+						<p:commandButton value="No" onclick="cd.hide();" type="button" />
+			</p:confirmDialog>
+	
+        <!-- New Requirement -->
+        <h:form id="formNewRequirement">
+			<p:dialog header="New Project" widgetVar="ReqDialog"
+					modal="true" showEffect="fade">
+
+				<p:messages id="messages" autoUpdate="true"/>
+				<h:panelGrid columns="2" id="matchGrid">
+					<h:outputText value="Requirement Name:" />
+					<p:inputText id="newRequirementName" size="90"
+						value="#{requirementBean.requirementName}" 
+						required="true"
+				        requiredMessage="Requiremen name is required"
+				        maxlength="127"/>
+
+					<h:outputText value="Requirement decription:" />
+					<p:inputTextarea rows="15" cols="100" id="newRequirementDecription" value="#{requirementBean.requirementDescription}" autoResize="false"
+					maxlength="4000"/>
+
+					<p:row>
+					<p:commandButton value="Close" oncomplete="ReqDialog.hide()"/>
+					<p:commandButton value="Create" id="saveNewRequirementButton" actionListener="#{requirementBean.addNewRequirement}" 
+											update=":formRequirements:dataListId, :defaultGrowl"/>
+					</p:row>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+
+		<!-- Manage Experts -->
+		<h:form id="formManageExperts">
+			<p:dialog header="Manage project experts" widgetVar="ExpDialog"
+					modal="true" showEffect="fade">
+					
+				<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" for="defaultmessages"/> 
+					
+				<p:pickList id="pojoPickList" value="#{projectBean.userDual}" var="user"  
+	                    itemValue="#{user}" itemLabel="#{user.userFirstName} #{user.userLastName} #{user.userFirstName} #{user.userLogin}"  converter="#{userConverter}"
+	                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" >
+	  
+		        <f:facet name="sourceCaption">All users</f:facet>  
+		        <f:facet name="targetCaption">Project experts</f:facet>  
+	  
+	        	<p:column>  
+	            	<h:outputText value="#{user.userFirstName} "/> 
+	        		<h:outputText value="#{user.userLastName}"/>  
+	        		<h:outputText value="(#{user.userLogin})"/>
+				</p:column> 
+	    		</p:pickList>  
+	    	
+	    		<p:commandButton value="Close" oncomplete="ExpDialog.hide()"/>
+	    		<p:commandButton id="pojoSubmit" value="Submit" actionListener="#{projectBean.submitLists}"/>
+			</p:dialog>
+		</h:form>
+		
+		<!-- Edit project -->
+		<h:form id="formEditProject">
+			<p:dialog header="Edit project" widgetVar="ProjDialog"
+					modal="true" showEffect="fade">
+					
+					<p:messages id="messages" autoUpdate="true"/>
+					
+					<h:panelGrid columns="2" id="matchGrid">
+						<h:outputText value="Project Name:" />
+						<p:inputText id="newProjectName" size="90"
+							value="#{projectBean.currentProject.projectName}" 
+							required="true"
+				        	requiredMessage="Project name is required"
+				        	maxlength="127"/>
+	
+						<h:outputText value="Project decription:"/>
+						<p:inputTextarea rows="15" cols="100" id="newProjectDecription" value="#{projectBean.currentProject.projectDescription}" 
+											maxlength="4000" autoResize="false"/>
+	
+						<f:facet name="footer">
+						<p:commandButton value="Close" oncomplete="ProjDialog.hide()"/>
+						<p:commandButton value="Submit changes" id="saveNewProjectButton" actionListener="#{projectBean.editProject}" 
+											update=":defaultGrowl, :formStart"/>						
+						</f:facet>
+					</h:panelGrid>
+			</p:dialog>
+		</h:form>
+		
+		
+
+	</ui:define>
+	
+</ui:composition>
