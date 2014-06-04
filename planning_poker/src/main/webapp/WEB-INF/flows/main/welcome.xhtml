@@ -16,7 +16,7 @@
 			<table align="center" style="margin-top: 50pt;" cellpadding="5">
 				<tr>
 					<td colspan="2">
-					<p:messages id="messages" showDetail="false"
+					<p:messages id="messages_main" showDetail="false"
 							autoUpdate="false" closable="false" /></td>
 				</tr>
 
@@ -39,10 +39,11 @@
 
 				<tr>
 					<td align="right"></td>
-					<td align="left"><p:commandButton value="Register" update=":formRegister, :formMain" oncomplete="RegDialog.show()" />
+					<td align="left"><p:commandButton value="Login" update="formMain" id="loginButton"
+							actionListener="#{userBean.userAuthentication}" />
 					<h:outputText value="  " />		
-					<p:commandButton value="Login" update="formMain" id="loginButton"
-							actionListener="#{userBean.userAuthentication}" /></td>
+					<p:commandButton value="Register" update=":formRegister, :formMain" oncomplete="RegDialog.show()" />
+					</td>
 				</tr>
 			</table>
 		</h:form>

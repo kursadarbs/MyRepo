@@ -23,6 +23,7 @@
 		</p:commandLink> &rarr; #{userBean.currentRequirement.requirementName}
 		
 		<h2>#{userBean.currentRequirement.requirementName}</h2>
+		<h3>Final Value: #{userBean.currentRequirement.value}</h3><br/><br/>
 		<h3>Round number: #{userBean.currentRequirement.round}</h3><br/><br/>
 		<h:outputText value="Requirement Description:" style="font-weight:bold" />
 		<p><h:outputText value="#{userBean.currentRequirement.requirementDescription}" styleClass="preformatted"/></p>
@@ -32,13 +33,16 @@
 		<h:form id="form2">
 			<center><h2>Requirement estimations</h2></center>
 			
-			<p:commandButton id="ResetEstimations"  value="Reset" actionListener="#{userBean.resetEstimations}" update=":form2:estDataTable, :defaultGrowl, :form"/>
+			<p:commandButton id="ResetEstimations"  value="Next round" actionListener="#{userBean.resetEstimations}" update=":form2:estDataTable, :defaultGrowl, :form"/>
 	        
 	       	<p:commandButton id="EstHistoryDialog" value="View history" actionListener="#{userBean.findEstHistory}"
 	       					 update=":form2:estHistoryOutputPanel" oncomplete="estDialog.show()">
 		   	</p:commandButton>
 		   	
 		   	<p:commandButton value="Edit requirement" id="editReq" oncomplete="ReqEDialog.show()" update=":formEditRequirement">
+			</p:commandButton>
+			
+			<p:commandButton value="Set final value" id="finalVal" oncomplete="FValDialog.show()" update=" ">
 			</p:commandButton>
 			
 			<p:remoteCommand autoRun="true"  name="dragons" actionListener="#{userBean.findReqEstimations()}" update="estDataTable"/>
@@ -116,6 +120,35 @@
 										update=":form, :defaultGrowl" />
 					</f:facet>
 				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+		
+		<!-- Set final value -->
+        <h:form id="formFinalValue">
+			<p:dialog header="Set final value" widgetVar="FValDialog"
+					modal="true" showEffect="fade">
+
+				<p:messages id="messages" autoUpdate="true"/>
+
+				<h:panelGrid columns="1" id="matchGrid2">
+					<h:outputText value="Value:" />
+					<p:inputText id="newValue" value="#{userBean.reqValue}" 
+					maxlength="9"
+					required="true"
+					converterMessage="Value must me a number"
+				    requiredMessage="Value is required"
+				    validatorMessage="Value is too long">
+				    </p:inputText>
+
+					<f:facet name="footer">
+					<p:commandButton value="Close" oncomplete="FValDialog.hide()"/>
+					<p:commandButton value="Submit value" actionListener="#{userBean.finalValue}" 
+										update=":defaultGrowl, :form">
+						<f:setPropertyActionListener value="#{userBean.reqValue}" target="#{projectBean.projectFinalSet}" />
+					</p:commandButton>
+					</f:facet>
+				</h:panelGrid>
+				
 			</p:dialog>
 		</h:form>
 		

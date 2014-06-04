@@ -31,7 +31,8 @@
 			                 <f:setPropertyActionListener value="#{req}" target="#{userBean.currentRequirement}" />
 			                 <f:setPropertyActionListener value="#{null}" target="#{userBean.reqEstimations}" />
 			        </p:commandLink> </h3>
-			        			        
+			        			
+			       	Round: #{req.round}        
 			</p:dataList>  
 			
 		</h:form>

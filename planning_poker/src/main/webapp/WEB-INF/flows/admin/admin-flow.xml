@@ -5,20 +5,14 @@
         http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
 	<secured attributes="ROLE_ADMIN" />
-
-	<view-state id="account" view="account.xhtml">
-		<transition on="project" to="proj" />
-	</view-state>
 	
 	<view-state id="proj" view="projects.xhtml">
-		<transition on="account" to="account" />
 		<transition on="requirement" to="req" />
 		<transition on="projectUsers" to="prUs" />
 	</view-state>
 	
 	<view-state id="req" view="project_req.xhtml">
 		<transition on="project" to="proj" />
-		<transition on="account" to="account" />
 		<transition on="onerequirement" to="oreq"/>
 		<transition on="requirement" to="req" />
 		<transition on="projectUsers" to="prUs" />
@@ -27,13 +21,11 @@
 	<view-state id="prUs" view="project_users.xhtml">
 		<transition on="project" to="proj" />
 		<transition on="onerequirement" to="oreq"/>
-		<transition on="account" to="account" />
 		<transition on="requirement" to="req" />
 	</view-state>
 	
 	<view-state id="oreq" view="requirement.xhtml">
 		<transition on="project" to="proj" />
-		<transition on="account" to="account" />
 		<transition on="requirement" to="req" />
 		<transition on="projectUsers" to="prUs" />
 	</view-state>

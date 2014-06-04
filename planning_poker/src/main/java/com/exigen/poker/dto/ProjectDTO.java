@@ -25,6 +25,7 @@ public class ProjectDTO {
 	
 	private String projectName;
 	private String projectDescription;
+	private Integer projectFinalSet;
 	
 	private ProjectEntity currentProject;
 	private RequirementEntity currentRequirement;
@@ -178,7 +179,15 @@ public class ProjectDTO {
 		}
 	}
 	
+	public void setProjectFinalSet(Integer projectFinalSet) {
+		currentProject.setValue(currentProject.getValue()+projectFinalSet);
+	}
+	
 	//----------------------------------------------------------------------------------------
+	
+	public Integer getProjectFinalSet() {
+		return projectFinalSet;
+	}
 	
 	public List<UserEntity> getProjectUsers() {
 		return this.projectUsers;

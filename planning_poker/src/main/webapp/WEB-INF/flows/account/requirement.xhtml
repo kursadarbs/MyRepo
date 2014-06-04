@@ -21,6 +21,7 @@
 		</p:commandLink> &rarr; #{userBean.currentRequirement.requirementName}
 	
 		<h2>#{userBean.currentRequirement.requirementName}</h2>
+		<h3>Final Value: #{userBean.currentRequirement.value}</h3><br/><br/>
 		<h3>Round number: #{userBean.currentRequirement.round}</h3><br/><br/>
 		<h:outputText value="Requirement Description:" style="font-weight:bold" />
 		<p><h:outputText value="#{userBean.currentRequirement.requirementDescription}" styleClass="preformatted"/></p>

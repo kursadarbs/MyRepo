@@ -52,6 +52,7 @@ public class UserDTO implements Serializable{
 	private String userLoginCheck;
 	private String userPassword;
 
+	private Integer reqValue;
 	private Integer value;
 	private String comment;
 
@@ -65,10 +66,10 @@ public class UserDTO implements Serializable{
 
 		try {
 			userService.createUserIfNotExist(user);
-
-			FacesContext.getCurrentInstance().addMessage(null,
+			
+			//RequestContext.getCurrentInstance().execute("RegDialog.hide()");
+			FacesContext.getCurrentInstance().addMessage(":formMain:messages_main",
 					new FacesMessage("Register Successful! You can log in."));
-			RequestContext.getCurrentInstance().execute("RegDialog.hide()");
 			RequestContext.getCurrentInstance().update(":formMain");
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(null,
@@ -170,7 +171,7 @@ public class UserDTO implements Serializable{
 			requirementService.incRound(currentRequirement);
 			
 			FacesContext.getCurrentInstance().addMessage("defaultGrowl",
-					new FacesMessage("Estimations reset succesfull"));
+					new FacesMessage("Entering next round succesful"));
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage("defaultGrowl",
 					new FacesMessage(e.getMessage()));
@@ -269,6 +270,32 @@ public class UserDTO implements Serializable{
 		this.allUsers = allUsers;
 	}*/
 
+	public void finalValue() throws Exception{
+		try {
+			
+			ProjectEntity vProject = currentRequirement.getProject();
+			Integer tempValue = getReqValue();
+			
+			if (currentRequirement.getValue()>0){
+				setReqValue(getReqValue()-currentRequirement.getValue());
+			}
+			
+			vProject.setValue(vProject.getValue()+getReqValue());
+			projectService.editProject(vProject);
+			
+			currentRequirement.setValue(tempValue);
+			requirementService.editRequirement(currentRequirement);
+			
+			FacesContext.getCurrentInstance().addMessage("defaultGrowl",
+					new FacesMessage("Requirement final value set succesfully!"));
+			
+			RequestContext.getCurrentInstance().execute("FValDialog.hide()");
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage("defaultGrowl",
+					new FacesMessage(e.getMessage()));
+		}
+	}
+	
 	// -----------------------------------------------------------------------------------------
 
 	public List<ProjectEntity> getUserProjects() {
@@ -422,6 +449,14 @@ public class UserDTO implements Serializable{
 
 	public void setRequirementService(RequirementService requirementService) {
 		this.requirementService = requirementService;
+	}
+
+	public Integer getReqValue() {
+		return reqValue;
+	}
+
+	public void setReqValue(Integer reqValue) {
+		this.reqValue = reqValue;
 	}
 
 }

@@ -59,8 +59,9 @@
 					header="Delete requirement" severity="alert" widgetVar="cd">
 					
 						<p:commandButton id="deleteRequirement" value="Yes" actionListener="#{requirementBean.deleteRequirement()}" 
-									oncomplete="cd.hide()" update=":formRequirements:, :formRequirements:dataListId, :defaultGrowl"/>
-						
+									oncomplete="cd.hide()" update=":formRequirements:, :formRequirements:dataListId, :defaultGrowl, formStart">
+									<f:setPropertyActionListener value="#{requirementBean.projectFinalSet}" target="#{projectBean.projectFinalSet}" />
+						</p:commandButton>
 						<p:commandButton value="No" onclick="cd.hide();" type="button" />
 			</p:confirmDialog>
 	

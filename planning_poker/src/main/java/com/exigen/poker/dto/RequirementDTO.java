@@ -24,6 +24,7 @@ public class RequirementDTO {
 	private String requirementName;
 	private String requirementDescription;
 	private String requirementProjectID;
+	private Integer projectFinalSet;
 
 	private List<RequirementEntity> allProjReq;
 	
@@ -36,7 +37,7 @@ public class RequirementDTO {
 		requirement.setRequirementDescription(requirementDescription);
 		requirement.setRequirementName(requirementName);
 		requirement.setRound(0);
-		requirement.setValue(-1);
+		requirement.setValue(0);
 		
 		try {
 			requirementService.createRequirementIfNotExist(currentProject,requirement);
@@ -60,6 +61,11 @@ public class RequirementDTO {
 	
 	public void deleteRequirement(){
 		try {
+			ProjectEntity pr = this.reqToDelete.getProject();
+			setProjectFinalSet(this.reqToDelete.getValue()*-1);
+			pr.setValue(pr.getValue()-this.reqToDelete.getValue());
+			projectService.editProject(pr);
+			
 			requirementService.deleteRequirement(this.reqToDelete);
 			findAllProjReq();
 			
@@ -83,8 +89,16 @@ public class RequirementDTO {
 	
 //---------------------------------------------------------------------------------------
 	
+	public void setProjectFinalSet(Integer projectFinalSet) {
+		this.projectFinalSet = projectFinalSet;
+	}
+	
 	public RequirementService getRequirementService() {
 		return requirementService;
+	}
+
+	public Integer getProjectFinalSet() {
+		return projectFinalSet;
 	}
 
 	public void setRequirementService(RequirementService requirementService) {
